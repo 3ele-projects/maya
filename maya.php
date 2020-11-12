@@ -13,6 +13,9 @@
  */
 
 // Your code starts here.
+include( plugin_dir_path( __FILE__ ) . 'assets/ajax.php');
+include( plugin_dir_path( __FILE__ ) . 'event.php');
+
 
 include( plugin_dir_path( __FILE__ ) . 'post-types/atemuebung.php');
 include( plugin_dir_path( __FILE__ ) . 'post-types/workout.php');

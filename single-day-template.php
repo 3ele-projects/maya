@@ -12,11 +12,36 @@ get_header();
 
 	<main id="primary" class="site-main">
 
+  <script type="text/javascript" >
+jQuery(document).ready(function($) {
+    $('.myajax').click(function(){
+      var mydata = $(this).data();
+
+      //var termID= $('#locinfo').val();
+     // console.log(mydata);
+        var data = {
+            action: 'custom_action',
+            start_date: '20201111',
+         //   end_date: '20201111'
+
+        };
+
+        $.post('<?php echo esc_url( home_url() ); ?>/wp-admin/admin-ajax.php', data, function(response) {
+           // alert('Got this from the server: ' + response);
+           $('#wpajaxdisplay').html(response);      
+        });
+    });
+});
+
+</script>
+<a href="#ajaxthing" class="myajax" data-id="600">Click On this</a>
+<div id="wpajaxdisplay">Ajax Result will display here</div>
+
 <?php
 
 
 //$startPoint = $swpm_user->member_since;
-$currentDate = date('Y-m-d');
+$currentDate = date('Ymd');
 $startPoint = date_create("2020-07-02");
 //$last_day = date('Y-m-d', strtotime($swpm_user->member_since. ' + 365 days')); 
 $begin = new DateTime($currentDate);
@@ -37,7 +62,6 @@ if (isset($_GET['date'])) {
   }
 //$date = 20201101;
 
-$image = get_field('seal_image', sealoftheday($date , $startPoint));
 //var_dump($image);
 //var_dump($date);
 $events = getcolorfromdate($date);
@@ -67,38 +91,59 @@ $calendar_events[] = $cal_event;
 
 <script>
 function get_day_events(){
-  return <?php json_encode($calendar_events)[0];?>;
+
+  var data = {
+            action: 'custom_action',
+            start_date: '20201111',
+         //   end_date: '2020111'
+
+        };
+
+        jQuery.post('<?php echo esc_url( home_url() ); ?>/wp-admin/admin-ajax.php', data, function(response) {
+     //     jQuery('#wpajaxdisplay').html(response);    
+          console.log(response) ;
+          events = response;
+           return response;
+
+        });
 };
 
 const CustomViewConfig = {
 
 classNames: [ 'custom-view' ],
-visibleRange: function(currentDate) {
-    // Generate a new date for manipulating in the next step
-    var startDate = new Date(currentDate.valueOf());
-    var endDate = new Date(currentDate.valueOf());
 
-    // Adjust the start & end dates, respectively
-    startDate.setDate(startDate.getDate() - 1); // One day in the past
-    endDate.setDate(endDate.getDate() + 2); // Two days into the future
-
-    return { start: startDate, end: endDate };
-  },
 
   type: 'timeGrid',
   duration: { days: 1 },
-  events: get_day_events,
+  events: get_day_events(),
+
+	eventContent: function(arg) {
+
+
+
+
+
+let content = document.createElement('div')
+content.innerHTML = '<img src="'+arg.event._def.extendedProps.seal+'"/>adadsa';
+let arrayOfDomNodes = [ content ]
+return { domNodes: arrayOfDomNodes }
+},
 content: function(props) {
-console.log(props);
+ id = get_day_events();
+ console.log(get_day_events());
+ console.log(calendar.EventStore);
+
+//console.log( props.eventStore.defs[14]);
 
   let html =
     '<div class="view-title">Workouts' +
     props.dateProfile.currentRange.start +
+   //.forEach(element => console.log(element));
 
     '</div>' +
-    '<div class="view-events">' +
-     ' events' +
-    '</div>'
+    '<div class="view-events">' +get_day_events()+
+      'events' +
+    'dkjfasjflkjfdlksj</div>'
 
   return { html: html }
 }

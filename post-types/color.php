@@ -89,7 +89,6 @@ add_filter( 'post_updated_messages', 'color_updated_messages' );
 
 function getcolorfromdate($date){
 	$date_array =($date);
-
     $posts = get_posts(array(
         'numberposts'	=> -1,
         'post_type'		=> 'color',
