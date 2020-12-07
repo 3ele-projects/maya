@@ -40,6 +40,7 @@ $cal_event['content'] = $event->post_content;
 $cal_event['start'] = get_field('date',$event->ID);
 $cal_event['classNames'] = get_field('color',$event->ID);
 $cal_event['seal'] = $image;
+
 echo  json_encode($cal_event);
 //return json_encode($cal_event);
 

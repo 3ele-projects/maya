@@ -87,15 +87,20 @@ function color_updated_messages( $messages ) {
 add_filter( 'post_updated_messages', 'color_updated_messages' );
 
 
-function getcolorfromdate($date){
-	$date_array =($date);
+function getcolorfromdate($start_date, $end_date){
+	$date_array =($start_date);
     $posts = get_posts(array(
         'numberposts'	=> -1,
-        'post_type'		=> 'color',
-        'meta_key'		=> 'date',
-		'meta_value'	=> $date,
-		'meta_compare'=>'<=',
-		'fields' => 'ID'
+		'post_type'		=> 'color',
+		'meta_query' => array(
+			array(
+				'key' => 'date',
+				'value' => array($start_date, $end_date),
+				'compare' => 'BETWEEN',
+				'type' => 'DATE'
+			),
+		)
+	
 	));
 
 	if($posts):
@@ -103,6 +108,33 @@ function getcolorfromdate($date){
 	return $posts;
 	else: 
 	return $date_array;
+	endif;	
+	
+}
+
+function get_posts_from_color($color_id, $post_type){
+    $posts = get_posts(array(
+        'numberposts'	=> -1,
+        'post_type'		=> $post_type,
+        'meta_key'		=> 'color',
+		'meta_value'	=> $color_id,
+		'meta_compare'=>'=',
+	));
+
+	if($posts):
+		$cpt_posts = array();
+		foreach ($posts as $post){
+			$cpt_post = array();
+			$cpt_post['ID'] = $post->ID;
+			$cpt_post['title'] = get_the_title($post->ID);
+			 $cpt_post['content'] = \Elementor\Plugin::$instance->frontend->get_builder_content_for_display($post->ID, true );
+			 $cpt_post['color'] = get_field('color', $post->ID);
+			 $cpt_posts[]  = $cpt_post;
+		}
+		
+	return $cpt_posts;
+	else: 
+return 'no '.$post_type.' Content from color';
 	endif;	
 	
 }
