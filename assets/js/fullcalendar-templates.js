@@ -10,7 +10,7 @@ const CustomViewConfig = {
   eventContent: function (arg) {
     
     let content = document.createElement('div')
-    content.innerHTML = '<img src="' + arg.event._def.extendedProps.seal + '"/>adadsa';
+    content.innerHTML = '<img src="' + arg.event._def.extendedProps.seal + '"/>'
     let arrayOfDomNodes = [content]
     return { domNodes: arrayOfDomNodes }
   },
@@ -169,15 +169,24 @@ var View = FC.View;      // the class that all views must inherit from
 var CustomView;          // our subclass
 
 CustomView = View.extend({ // make a subclass of View
+  type: 'agenda',
+  duration: { days: 1 },
+  dayCount: 1,
+  visibleRange: {
+    start: '2017-03-22',
 
+  }, 
   initialize: function() {
-    // called once when the view is instantiated, when the user switches to the view.
-    // initialize member variables or do other setup tasks.
+   // type: 'basic',
+   // duration: { days: 1 }
   },
 
-  render: function() {
+  render: function () { 
+  //  type: 'basic',
+  //  duration: { days: 1 }
     // responsible for displaying the skeleton of the view within the already-defined
     // this.el, a jQuery element.
+ //   console.log(this.el)
   },
 
   setHeight: function(height, isAuto) {
@@ -187,13 +196,15 @@ CustomView = View.extend({ // make a subclass of View
 
   renderEvents: function(events) {
     // reponsible for rendering the given Event Objects
+  //  console.log(events);
   },
 
   destroyEvents: function() {
     // responsible for undoing everything in renderEvents
   },
 
-  renderSelection: function(range) {
+  renderSelection: function (range) {
+    console.log(range);
     // accepts a {start,end} object made of Moments, and must render the selection
   },
 
