@@ -15,7 +15,7 @@ const CustomViewConfig = {
     return { domNodes: arrayOfDomNodes }
   },
   content: function (props) {
-    
+    console.log(props);
     let segs = FullCalendar.sliceEvents(props, true);
     day_event = segs[0];
     let aufwaermuebung = '';
@@ -33,9 +33,9 @@ const CustomViewConfig = {
 
       );
       let html =
-        '<div class="view-title"><img style="width:200px;" src=" '+day_event.def.extendedProps.seal +'"/><label for="cars">Wähle Wiederholung:</label>'+
-     '<select id="repeat" name="repeat"><option value="1">1</option> <option value="2">2</option><option value="3">3</option><option value="4">4</option></select>'+
-        
+        '<div class="view-title"><img style="width:200px;" id="'+day_event.def.extendedProps.seal_id +'" src=" '+day_event.def.extendedProps.seal +'"/><label for="repeat">Wähle Wiederholung:</label>'+
+     '<select id="repeat" name="repeat"><option value="4">4</option> <option value="7">7</option><option value="13">13</option><option value="20">20</option><option value="20">20</option><option value="33">33</option><option value="40">40</option><option value="44">44</option><option value="51">51</option></select>'+
+        '<span id="moon_cycle">Vollmond</span>'+
         '</div>'
 
 +`<div id="accordion">
@@ -97,7 +97,110 @@ Atemübungen
     }
     
 }
-    
+const CustomViewYear = {
+
+  classNames: ['year'],
 
 
-    
+  contentHeight: 'auto',
+  height: 'auto',
+  buttonText: 'year',
+  type: 'listYear',
+
+
+  dateIncrement: {
+    years: 1
+  },
+  slotDuration: {
+    months: 12
+  },
+  slotMinTime: {
+    months: 12
+  },
+  slotMaxTime: {
+    months: 12
+  },
+  visibleRange: function(currentDate) {
+    return {
+      start: currentDate.clone().startOf('year'),
+      end: currentDate.clone().endOf("year")
+    };
+  },
+  
+
+  
+  content: function (props) {
+  var  months = ["Januar", "Februar", "März", "April", "Mai", "June", "July", "August", "September", "October", "November", "December"];
+  var d = new Date();
+  var monthName=months[d.getMonth()]; // "July" (or current month)
+   custom_month_view = ''
+    console.log(props)
+    n = 0;
+
+    while (n < 12) {
+      sep = '';
+      sep_end = ''; 
+   
+      if (n % 3 == 0) {
+     //   alert(n);
+        sep = '<tr>';
+        sep_end = '</tr>';
+      }
+      else { 
+        sep = '';
+        sep_end = ''; 
+      }
+
+      custom_month_view +=  '<div data-month="'+n+'" class="fc-month-view"><div class="month" id="'+n+'">'+months[n]+'</div>'
+      n++;
+
+    }  
+     // let html = '<div class="month">1</div><div class="month">1</div><div class="month">1</div><div class="month">1</div><div class="month">1</div><div class="month">1</div><div class="month">1</div><div class="month">1</div><div class="month">1</div><div class="month">1</div><div class="month">1</div>'
+    let html = '<div class="year-grid">'+custom_month_view+'</div>'
+   // let html = '';
+      return { html: html }
+    }
+}
+
+
+
+var FC = $.fullCalendar; // a reference to FullCalendar's root namespace
+var View = FC.View;      // the class that all views must inherit from
+var CustomView;          // our subclass
+
+CustomView = View.extend({ // make a subclass of View
+
+  initialize: function() {
+    // called once when the view is instantiated, when the user switches to the view.
+    // initialize member variables or do other setup tasks.
+  },
+
+  render: function() {
+    // responsible for displaying the skeleton of the view within the already-defined
+    // this.el, a jQuery element.
+  },
+
+  setHeight: function(height, isAuto) {
+    // responsible for adjusting the pixel-height of the view. if isAuto is true, the
+    // view may be its natural height, and `height` becomes merely a suggestion.
+  },
+
+  renderEvents: function(events) {
+    // reponsible for rendering the given Event Objects
+  },
+
+  destroyEvents: function() {
+    // responsible for undoing everything in renderEvents
+  },
+
+  renderSelection: function(range) {
+    // accepts a {start,end} object made of Moments, and must render the selection
+  },
+
+  destroySelection: function() {
+    // responsible for undoing everything in renderSelection
+  }
+
+});
+
+FC.views.custom = CustomView; // register our class with the view system

@@ -23,7 +23,7 @@ include( plugin_dir_path( __FILE__ ) . 'post-types/aufwaermuebung.php');
 include( plugin_dir_path( __FILE__ ) . 'post-types/workout.php');
 include( plugin_dir_path( __FILE__ ) . 'post-types/color.php');
 include( plugin_dir_path( __FILE__ ) . 'shortcodes/calendar.php');
-
+include( plugin_dir_path( __FILE__ ) . 'assets/assets.php');
 
 
 function getpostfromfield($seal_id, $field){
@@ -47,14 +47,20 @@ function load_custom_workouts(){
 }
 
 function sealoftheday($currentDate , $startPoint){
-    
+//	$currentDate = date('Y-m-d');
+//	$startPoint = date_create("2020-12-01");
+//	$now = date_create("2020-12-21");
     $now = date_create($currentDate);
     $diff = date_diff($startPoint, $now);
     $d = (int)($diff->days/20);
 
 
-    $seal_id =$diff->days -($d*20);
-    $seal_post_id = getpostfromfield($seal_id, 'seal_id');
+	$seal_id =($diff->days -($d*20))+1;
+
+	$seal_post_id = getpostfromfield($seal_id, 'seal_id');
+	
+
+
     return $seal_post_id;
     
 }
@@ -211,25 +217,6 @@ class PageTemplater {
 
 } 
 add_action( 'plugins_loaded', array( 'PageTemplater', 'get_instance' ) );
-
-
-
-
-function themeprefix_bootstrap_modals() {
-		wp_enqueue_script( 'fullcalendar','https://cdn.jsdelivr.net/npm/fullcalendar@5.3.2/main.min.js', array( 'jquery' ) );
-		wp_enqueue_script( 'fullcalendar-templates', plugin_dir_url( __FILE__ ) . '/assets/js/fullcalendar-templates.js', array( 'jquery' ) );
-		wp_enqueue_script( 'accordionjs', plugin_dir_url( __FILE__ ) . '/assets/js/bootstrap.js', array( 'jquery' ) );
-		wp_register_style ( 'fullcalendar_main' ,'https://cdn.jsdelivr.net/npm/fullcalendar@5.3.2/main.css', array('style') );
-
-		wp_register_style ( 'boostrap.css' , plugin_dir_url( __FILE__ ) . '/assets/css/bootstrap.min.css' );
-		wp_register_style ( 'accordion' , plugin_dir_url( __FILE__ ) . '/assets/css/accordion.css' );
-
-}
-
-add_action( 'wp_enqueue_scripts', 'themeprefix_bootstrap_modals');
-
-
-
 
 
 	function my_page_columns($columns) {
