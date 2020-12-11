@@ -46,7 +46,7 @@ function maya_show_calendar2()
             domNodes: arrayOfDomNodes
           }
         },
-        height: 'auto',
+
         timeZone: 'UTC',
         themeSystem: 'bootstrap',
         headerToolbar: {
@@ -123,9 +123,10 @@ function maya_show_calendar()
 
       var today = moment().day();
       var calendar = $('#calendar').fullCalendar({
-        height: 'parent',
+        height: set_new_height(),
         //height: auto,
         timeZone: 'UTC',
+        contentHeight: 999,
 
         header: {
           left: 'prev,next today',
@@ -159,88 +160,8 @@ function maya_show_calendar()
             element = content
             return element
           } else {
-            let aufwaermuebung = '';
+            element = single_day_template(event, element, view)
 
-            event.aufwaermuebung.forEach(function(entry) {
-              aufwaermuebung += '<div>' + entry.title + '</div>';
-              aufwaermuebung += '<div>' + entry.content + '</div>';
-            });
-            let atemuebung = '';
-
-            event.atemuebung.forEach(function(entry) {
-              atemuebung += '<div>' + entry.title + '</div>';
-              atemuebung += '<div>' + entry.content + '</div>';
-            });
-
-            let html = '<div class="view-title"><img style="width:200px;" id="" src="' + event.seal + '"/><label for="repeat">Wähle Wiederholung:</label>' +
-              '<select id="repeat" name="repeat"><option value="4">4</option> <option value="7">7</option><option value="13">13</option><option value="20">20</option><option value="20">20</option><option value="33">33</option><option value="40">40</option><option value="44">44</option><option value="51">51</option></select>' +
-              '<span id="moon_cycle">Vollmond</span>' +
-              '</div>'
-
-              +
-              `<div id="accordion">
-<div class="card">
-  <div class="card-header" id="headingOne">
-    <h5 class="mb-0">
-      <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" >` +
-              event.workout_title + `
-      </button>
-    </h5>
-  </div>
-
-  <div id="collapseOne" class="collapse accordion" aria-labelledby="headingOne" data-parent="#accordion">
-    <div class="card-body">
-    `
-            `
-    </div>
-  </div>
-</div>
-
-</div>
-` + atemuebung +
-              `<div id="accordion">
-<div class="card">
-  <div class="card-header" id="headingOne">
-    <h5 class="mb-0">
-      <button class="btn btn-link" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseOne">
-Workouts
-      </button>
-    </h5>
-  </div>
-
-  <div id="collapseTwo" class="collapse accordion" aria-labelledby="headingOne" data-parent="#accordion" style="height:0px">
-    <div class="card-body">
-    `+  aufwaermuebung+`
-    </div>
-  </div>
-</div>` + atemuebung +
-              `<div id="accordion">
-<div class="card">
-  <div class="card-header" id="headingOne">
-    <h5 class="mb-0">
-      <button class="btn btn-link" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseOne">
-Atemübungen
-      </button>
-    </h5>
-  </div>
-
-  <div id="collapseThree" class="collapse accordion " aria-labelledby="headingOne" data-parent="#accordion" style="height:0px">
-    <div class="card-body">
- 
-` + atemuebung +
-              `
-    </div>
-  </div>
-</div>
-</div>
-
-`
-
-            let content_header = document.createElement('div')
-            let content = document.createElement('div')
-            content.innerHTML = '<img src="' + event.seal + '"/>'
-            content_header.innerHTML = '<img src="' + event.seal + '"/>'
-            element = html
             return element
 
           }
@@ -248,23 +169,90 @@ Atemübungen
         navLinks: true, // can click day/week names to navigate views
         editable: false,
         eventLimit: true, // allow "more" link when too many events
+        handleWindowResize: true,
+        windowResize: function(view) {
+          set_new_height()
+        
+        },
         events: <?php echo json_encode($calendar_events); ?>,
       });
-      //calendar.setOption('locale', 'de');
+      calendar.setOption('locale', 'de');
+   
     });
   </script>
 
+  <script>
+function set_new_height(){
+  var height = $('.fc-event-container').height();
+          console.log($('.fc-event-container'))
+          console.log(height);
+          console.log($('.fc-content-skeleton').height())
+         // $('#calendar').fullCalendar.setOption('height', 9999999);
+         // $('#calendar').fullCalendar.setOption('contentHeight', 9999999);
+          $('.fc-day-grid-container').height(height);
+       //   calendar.setOption('contentHeight', height);
+       return $('.fc-content-skeleton').height()
+}
+
+
+  </script>
 
 
   <div id='calendar'></div>
   <style>
-    .fc-basic-view .fc-body .fc-row {
+
+#content {
+      min-height: 100%;
+      height: 100%;
+    }
+
+   .fc-basicDay-view .fc-basic-view .fc-body .fc-row {
       min-height: 8em;
     }
 
-    #content {
-      min-height: 80vh;
+  .fc-basicDay-view  .fc-row.fc-rigid {
+    /*  overflow: auto !important; */
+      height: 100% !important; 
     }
+
+
+    .fc-row.fc-rigid {
+    overflow: unset;
+}
+
+  .fc-basicDay-view  .fc-day-grid-container {
+/*height:100%!important; */
+overflow:unset!important;
+
+
+    }
+
+  .fc-basicDay-view  .fc-scroller > .fc-day-grid, .fc-scroller > .fc-time-grid {
+    position: relative;
+    width: 100%;
+    height: 100%;
+ /*   min-width: 100vh; */
+}
+
+.fc-basicDay-view .fc-row.fc-rigid .fc-content-skeleton {
+    position: relative!important;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+.fc-basicDay-view .fc-day-grid-container {
+  height:auto!important;
+}
+
+.fc-basicDay-view .fc-event-container {
+  overflow-x:hidden;
+  width:100%;
+}
+
+.fc-year-view .fc-day-grid-container{
+display:none;
+}
+
   </style>
 <?php
   $output_string = ob_get_contents();

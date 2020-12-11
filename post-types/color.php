@@ -134,7 +134,7 @@ function get_posts_from_color($color_id, $post_type){
 		
 	return $cpt_posts;
 	else: 
-return 'no '.$post_type.' Content from color';
+return '';
 	endif;	
 	
 }
