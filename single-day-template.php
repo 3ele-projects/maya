@@ -60,11 +60,6 @@ $calendar_events[] = $cal_event;
 //var_dump($calendar_events);
 ?>
 
-<?php
-
-
-
-?>
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.2/locales-all.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.2/main.css">
 <!--<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.2/main.min.js"></script> -->
