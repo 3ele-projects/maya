@@ -1,94 +1,5 @@
 <?php
 
-add_shortcode('maya_calendar2', 'maya_show_calendar2');
-
-function maya_show_calendar2()
-{
-  ob_start();
-
-  //$startPoint = $swpm_user->member_since;
-  $currentDate = date('Ymd');
-  $startPoint = date_create("2020-07-02");
-  //$last_day = date('Y-m-d', strtotime($swpm_user->member_since. ' + 365 days')); 
-  $begin = new DateTime($currentDate);
-  $end = date_create("2023-07-02");
-
-  if (isset($_GET['date'])) {
-    $date = $_GET['date'];
-  } else {
-    $date = Date('Ymd');
-  }
-  $end_date = date('Ymd', strtotime('51 days'));
-  $events = getcolorfromdate($date, $end_date);
-  $calendar_events = array();
-  $Maya_Calendar = new MayaCalender();
-  foreach ($events as $event) {
-    $cal_event = $Maya_Calendar->build_day($event->ID, $startPoint);
-    $calendar_events[] = $cal_event;
-  }
-  //var_dump($calendar_events);
-?>
-
-
-
-
-  <!-- Button trigger modal -->
-
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      var calendarEl = document.getElementById('calendar');
-      var calendar = new FullCalendar.Calendar(calendarEl, {
-        eventContent: function(arg) {
-          let content = document.createElement('div')
-          content.innerHTML = '<img is="' + arg.event._def.extendedProps.seal_id + '" src="' + arg.event._def.extendedProps.seal + '"/>';
-          let arrayOfDomNodes = [content]
-          return {
-            domNodes: arrayOfDomNodes
-          }
-        },
-
-        timeZone: 'UTC',
-        themeSystem: 'bootstrap',
-        headerToolbar: {
-          left: 'prev,next,today',
-          center: 'title',
-          right: 'custom,dayGridWeek,dayGridMonth,year'
-        },
-
-        events: <?php echo json_encode($calendar_events); ?>,
-        views: {
-          custom: CustomViewConfig,
-          year: CustomViewYear
-
-        },
-        initialView: 'custom',
-        eventClick: function(info) {
-          calendar.changeView('custom', info.event.start);
-        }
-
-      });
-      calendar.setOption('locale', 'de');
-      calendar.render();
-
-    });
-  </script>
-  <div id='calendar'></div>
-  <style>
-    .accordion {
-      overflow: hidden;
-    }
-  </style>
-
-<?php
-  $output_string = ob_get_contents();
-  ob_end_clean();
-  return $output_string;
-  wp_reset_postdata();
-}
-
-
-
-
 add_shortcode('maya_calendar', 'maya_show_calendar');
 
 function maya_show_calendar()
@@ -119,10 +30,10 @@ function maya_show_calendar()
 ?>
 
   <script>
-    $(document).ready(function() {
+    jQuery(document).ready(function() {
 
       var today = moment().day();
-      var calendar = $('#calendar').fullCalendar({
+      var calendar = jQuery('#calendar').fullCalendar({
         height: set_new_height(),
         //height: auto,
         timeZone: 'UTC',
@@ -138,11 +49,11 @@ function maya_show_calendar()
         //   initialView: 'custom',
         defaultView: 'basicDay',
         firstDay: today,
-        defaultDate: $('#calendar').fullCalendar('today'),
+        defaultDate: jQuery('#calendar').fullCalendar('today'),
         eventClick: function(event) {
 
 
-          $('#calendar').fullCalendar('changeView', 'basicDay', event.start._i);
+          jQuery('#calendar').fullCalendar('changeView', 'basicDay', event.start._i);
 
 
         },
@@ -183,15 +94,15 @@ function maya_show_calendar()
 
   <script>
 function set_new_height(){
-  var height = $('.fc-event-container').height();
-          console.log($('.fc-event-container'))
+  var height = jQuery('.fc-event-container').height();
+          console.log(jQuery('.fc-event-container'))
           console.log(height);
-          console.log($('.fc-content-skeleton').height())
+          console.log(jQuery('.fc-content-skeleton').height())
          // $('#calendar').fullCalendar.setOption('height', 9999999);
          // $('#calendar').fullCalendar.setOption('contentHeight', 9999999);
-          $('.fc-day-grid-container').height(height);
+         jQuery('.fc-day-grid-container').height(height);
        //   calendar.setOption('contentHeight', height);
-       return $('.fc-content-skeleton').height()
+       return jQuery('.fc-content-skeleton').height()
 }
 
 
