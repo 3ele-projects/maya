@@ -1,6 +1,4 @@
-
 <?php 
-
 // Define path and URL to the ACF plugin.
 define( 'MY_ACF_PATH', plugin_dir_path( __FILE__ )  );
 define( 'MY_ACF_URL', plugin_dir_url( __FILE__) );
@@ -362,4 +360,3 @@ acf_add_local_field_group(array(
 ));
 
 endif;
-?>

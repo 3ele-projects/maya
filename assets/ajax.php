@@ -61,5 +61,4 @@ function custom_action_callback_wp() {
     }
      exit() ;
 ; // this is required to return a proper result
-} ?>
-	
+}	
