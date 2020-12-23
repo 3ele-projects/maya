@@ -88,10 +88,14 @@ add_filter( 'post_updated_messages', 'color_updated_messages' );
 
 
 function getcolorfromdate($start_date, $end_date){
-	$date_array =($start_date);
+
+	attach_s2member_query_filters();
     $posts = get_posts(array(
         'numberposts'	=> -1,
 		'post_type'		=> 'color',
+	//	'meta_key' => 'date',
+     //   'orderby' => 'meta_value',
+     //   'order' => 'DESC',
 		'meta_query' => array(
 			array(
 				'key' => 'date',
@@ -104,7 +108,6 @@ function getcolorfromdate($start_date, $end_date){
 	));
 
 	if($posts):
-	
 	return $posts;
 	else: 
 	return $date_array;
@@ -113,6 +116,7 @@ function getcolorfromdate($start_date, $end_date){
 }
 
 function get_posts_from_color($color_id, $post_type){
+	attach_s2member_query_filters();
     $posts = get_posts(array(
         'numberposts'	=> -1,
         'post_type'		=> $post_type,

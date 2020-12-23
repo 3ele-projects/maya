@@ -6,34 +6,41 @@ function maya_show_calendar()
 {
   ob_start();
 
-  //$startPoint = $swpm_user->member_since;
-  $currentDate = date('Ymd');
-  $startPoint = date_create("2020-07-02");
-  //$last_day = date('Y-m-d', strtotime($swpm_user->member_since. ' + 365 days')); 
-  $begin = new DateTime($currentDate);
-  $end = date_create("2023-07-02");
 
-  if (isset($_GET['date'])) {
-    $date = $_GET['date'];
+
+
+
+
+  $startPoint = date_create("2020-12-02");
+  if ($s2member_auto_eot_time = get_user_field("s2member_auto_eot_time")) {
+    //echo "EOT : ".date("F j, Y", $s2member_auto_eot_time)."";
+    $start_date = date("Y-m-d");
+    $end_date = date("Y-m-d", $s2member_auto_eot_time);
   } else {
-    $date = Date('Ymd');
+    $start_date = date("Y-m-d");
+    $end_date = date('Y-m-d', strtotime('365 days'));
   }
-  $end_date = date('Ymd', strtotime('51 days'));
-  $events = getcolorfromdate($date, $end_date);
+
+  $events = getcolorfromdate($start_date, $end_date);
   $calendar_events = array();
+  //var_dump($events);
   $Maya_Calendar = new MayaCalender();
   foreach ($events as $event) {
+
     $cal_event = $Maya_Calendar->build_day($event->ID, $startPoint);
     $calendar_events[] = $cal_event;
+    // var_dump($cal_event);
   }
-  //var_dump($calendar_events);
+
 ?>
 
   <script>
     jQuery(document).ready(function() {
 
       var today = moment().day();
+      //   console.log(today);
       var calendar = jQuery('#calendar').fullCalendar({
+
         height: set_new_height(),
         //height: auto,
         timeZone: 'UTC',
@@ -83,87 +90,92 @@ function maya_show_calendar()
         handleWindowResize: true,
         windowResize: function(view) {
           set_new_height()
-        
+
         },
         events: <?php echo json_encode($calendar_events); ?>,
+
+
+        <?php if (defined('ICL_LANGUAGE_CODE')) { ?>
+
+          locale: '<?php echo ICL_LANGUAGE_CODE; ?>'
+
+        <?php } else { ?>
+          locale: 'de'
+        <?php } ?>
+
       });
-      calendar.setOption('locale', 'de');
-   
+
+
     });
   </script>
-
   <script>
-function set_new_height(){
-  var height = jQuery('.fc-event-container').height();
-          console.log(jQuery('.fc-event-container'))
-          console.log(height);
-          console.log(jQuery('.fc-content-skeleton').height())
-         // $('#calendar').fullCalendar.setOption('height', 9999999);
-         // $('#calendar').fullCalendar.setOption('contentHeight', 9999999);
-         jQuery('.fc-day-grid-container').height(height);
-       //   calendar.setOption('contentHeight', height);
-       return jQuery('.fc-content-skeleton').height()
-}
+    function set_new_height() {
+      var height = jQuery('.fc-event-container').height();
 
-
+      // $('#calendar').fullCalendar.setOption('height', 9999999);
+      // $('#calendar').fullCalendar.setOption('contentHeight', 9999999);
+      jQuery('.fc-day-grid-container').height(height);
+      //   calendar.setOption('contentHeight', height);
+      return jQuery('.fc-content-skeleton').height()
+    }
   </script>
 
 
   <div id='calendar'></div>
   <style>
-
-#content {
+    #content {
       min-height: 100%;
       height: 100%;
     }
 
-   .fc-basicDay-view .fc-basic-view .fc-body .fc-row {
+    .fc-basicDay-view .fc-basic-view .fc-body .fc-row {
       min-height: 8em;
     }
 
-  .fc-basicDay-view  .fc-row.fc-rigid {
-    /*  overflow: auto !important; */
-      height: 100% !important; 
+    .fc-basicDay-view .fc-row.fc-rigid {
+      /*  overflow: auto !important; */
+      height: 100% !important;
     }
 
 
     .fc-row.fc-rigid {
-    overflow: unset;
-}
+      overflow: unset;
+    }
 
-  .fc-basicDay-view  .fc-day-grid-container {
-/*height:100%!important; */
-overflow:unset!important;
+    .fc-basicDay-view .fc-day-grid-container {
+      /*height:100%!important; */
+      overflow: unset !important;
 
 
     }
 
-  .fc-basicDay-view  .fc-scroller > .fc-day-grid, .fc-scroller > .fc-time-grid {
-    position: relative;
-    width: 100%;
-    height: 100%;
- /*   min-width: 100vh; */
-}
+    .fc-basicDay-view .fc-scroller>.fc-day-grid,
+    .fc-scroller>.fc-time-grid {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      /*   min-width: 100vh; */
+    }
 
-.fc-basicDay-view .fc-row.fc-rigid .fc-content-skeleton {
-    position: relative!important;
-    top: 0;
-    left: 0;
-    right: 0;
-}
-.fc-basicDay-view .fc-day-grid-container {
-  height:auto!important;
-}
+    .fc-basicDay-view .fc-row.fc-rigid .fc-content-skeleton {
+      position: relative !important;
+      top: 0;
+      left: 0;
+      right: 0;
+    }
 
-.fc-basicDay-view .fc-event-container {
-  overflow-x:hidden;
-  width:100%;
-}
+    .fc-basicDay-view .fc-day-grid-container {
+      height: auto !important;
+    }
 
-.fc-year-view .fc-day-grid-container{
-display:none;
-}
+    .fc-basicDay-view .fc-event-container {
+      overflow-x: hidden;
+      width: 100%;
+    }
 
+    .fc-year-view .fc-day-grid-container {
+      display: none;
+    }
   </style>
 <?php
   $output_string = ob_get_contents();
