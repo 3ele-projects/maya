@@ -221,7 +221,7 @@ function single_day_template(event, element, view) {
 
 
     let aufwaermuebung = '';
-
+	try {
     if (event.aufwaermuebung) { 
 
         event.aufwaermuebung.forEach(function (entry) {
@@ -233,25 +233,39 @@ function single_day_template(event, element, view) {
   
   
     });
-
-    }
+}}
+catch(err) {
+console.log(err)
+}
+    
  
     let atemuebung = '';
-    if (event.aufwaermuebung) { 
+	try {
+		    if (event.aufwaermuebung) { 
+		console.log(typeof event.atemuebung)
+		console.log(event.atemuebung)
+
     event.atemuebung.forEach(function(entry) {
         atemuebung += '<div>' + entry.title + '</div>';
         atemuebung += '<div>' + entry.content + '</div>';
     });
     }
+}
+catch(err) {
+console.log(err)
+}
+
 var moon_phase = '<span></span>'
     if (event.moon_phase) {
 
         var moon_phase = '<span>' + event.moon_phase + '</span>'
     } 
     
-    let html = '<div class="view-title"><img style="width:200px;" id="" src="' + event.seal + '"/><label for="repeat">Wähle Wiederholung:</label>' +
-        '<select id="repeat" name="repeat"><option value="4">4</option> <option value="7">7</option><option value="13">13</option><option value="20">20</option><option value="20">20</option><option value="33">33</option><option value="40">40</option><option value="44">44</option><option value="51">51</option></select>' + moon_phase +
-        '</div>' +
+    let html = '<div class="view-title"><img style="width:200px;" id="" src="' + event.seal + '"/>'+event.color_title+' ' +
+        '' + moon_phase +
+        '</div>'
+        
+        /* +
     `<div id="accordion">
 <div class="card">
 <div class="card-header" id="headingOne">
@@ -308,7 +322,7 @@ Atemübungen
 </div>
 
 `
-
+*/
     return html
 
 }

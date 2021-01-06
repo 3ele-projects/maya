@@ -1,16 +1,47 @@
 <?php
 
 add_shortcode('maya_calendar', 'maya_show_calendar');
+add_shortcode('maya_workouts', 'maya_workouts');
+add_shortcode('maya_meditation', 'maya_meditation');
+add_shortcode('maya_atemuebung', 'maya_atemuebung');
+add_shortcode('maya_aufwaermuebung', 'maya_aufwaermuebung');
+
+
+function maya_workouts(){
+  ob_start(); ?>
+  <div id="maya_workouts"></div>
+  <?php 
+  $output_string = ob_get_contents(); 
+  ob_end_clean();
+  return $output_string;
+}
+function maya_meditation(){
+  ob_start();
+  ?><div id="maya_meditation"></div><?php
+  $output_string = ob_get_contents();
+  ob_end_clean();
+  return $output_string;
+}
+function maya_atemuebung(){
+  ob_start();
+  ?><div id="maya_atemuebung"></div><?php
+  $output_string = ob_get_contents();
+  ob_end_clean();
+  return $output_string;
+}
+function maya_aufwaermuebung(){
+  ?><div id="maya_aufwaermuebung"></div><?php
+
+  ob_start();
+  $output_string = ob_get_contents();
+  ob_end_clean();
+  return $output_string;
+}
+
 
 function maya_show_calendar()
 {
   ob_start();
-
-
-
-
-
-
   $startPoint = date_create("2020-12-02");
   if ($s2member_auto_eot_time = get_user_field("s2member_auto_eot_time")) {
     //echo "EOT : ".date("F j, Y", $s2member_auto_eot_time)."";
@@ -23,13 +54,11 @@ function maya_show_calendar()
 
   $events = getcolorfromdate($start_date, $end_date);
   $calendar_events = array();
-  //var_dump($events);
   $Maya_Calendar = new MayaCalender();
   foreach ($events as $event) {
-
     $cal_event = $Maya_Calendar->build_day($event->ID, $startPoint);
     $calendar_events[] = $cal_event;
-    // var_dump($cal_event);
+
   }
 
 ?>
@@ -72,7 +101,13 @@ function maya_show_calendar()
             let content = document.createElement('div')
 
             //    content.innerHTML = '<img is="' + arg.event._def.extendedProps.seal_id + '" src="' + arg.event._def.extendedProps.seal + '"/>';
-            content.innerHTML = '<img src="' + event.seal + '"/>'
+            //    content.innerHTML = '<img class="skip-lazy" src="' + event.seal + '"/>'
+           // content.innerHTML = event.color_title
+           var moon_phase =  event.moon_phase
+            var moon_phase = (typeof moon_phase === 'undefined') ? '' : moon_phase;
+			content.innerHTML += '<div class="m-1 moon_phase"> '+ moon_phase +'</div>'
+			
+			content.innerHTML += '<img class="skip-lazy" src="' + event.seal + '"/>'
 
 
             element = content
@@ -80,6 +115,20 @@ function maya_show_calendar()
           } else {
             element = single_day_template(event, element, view)
 
+console.log(    event.atemuebung)
+event.aufwaermuebung.forEach(function(entry) {
+console.log(entry.ID);
+ajax_load_post(entry.ID, 'maya_atemuebung')
+         
+        });
+
+        event.atemuebung.forEach(function(entry) {
+console.log(entry.ID);
+ajax_load_post(entry.ID, 'maya_atemuebung')
+         
+        });
+            ajax_load_post(event.workout_id, 'maya_workouts')
+            ajax_load_post(event.workout_id, 'maya_atemuebung')
             return element
 
           }
@@ -119,7 +168,6 @@ function maya_show_calendar()
       return jQuery('.fc-content-skeleton').height()
     }
   </script>
-
 
   <div id='calendar'></div>
   <style>
