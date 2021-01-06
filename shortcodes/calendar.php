@@ -49,7 +49,7 @@ function maya_show_calendar()
     $end_date = date("Y-m-d", $s2member_auto_eot_time);
   } else {
     $start_date = date("Y-m-d");
-    $end_date = date('Y-m-d', strtotime('365 days'));
+    $end_date = date('Y-m-d', strtotime('30 days'));
   }
 
   $events = getcolorfromdate($start_date, $end_date);
@@ -115,20 +115,18 @@ function maya_show_calendar()
           } else {
             element = single_day_template(event, element, view)
 
-console.log(    event.atemuebung)
-event.aufwaermuebung.forEach(function(entry) {
-console.log(entry.ID);
-ajax_load_post(entry.ID, 'maya_atemuebung')
-         
-        });
 
-        event.atemuebung.forEach(function(entry) {
+console.log(event.ID)
+
+/*         event.atemuebung.forEach(function(entry) {
 console.log(entry.ID);
 ajax_load_post(entry.ID, 'maya_atemuebung')
          
-        });
-            ajax_load_post(event.workout_id, 'maya_workouts')
-            ajax_load_post(event.workout_id, 'maya_atemuebung')
+        }); */
+            ajax_load_post([event.workout_id], 'maya_workouts')
+            ajax_load_post(event.atemuebung, 'maya_atemuebung')
+            ajax_load_post([event.a_id], 'maya_workouts')
+
             return element
 
           }
