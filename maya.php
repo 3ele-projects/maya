@@ -17,6 +17,7 @@ include( plugin_dir_path( __FILE__ ) . 'assets/ajax.php');
 include( plugin_dir_path( __FILE__ ) . 'event.php');
 
 include( plugin_dir_path( __FILE__ ) . 'acf/fields.php');
+include( plugin_dir_path( __FILE__ ) . 'post-types/meditation.php');
 
 include( plugin_dir_path( __FILE__ ) . 'post-types/atemuebung.php');
 include( plugin_dir_path( __FILE__ ) . 'post-types/aufwaermuebung.php');
