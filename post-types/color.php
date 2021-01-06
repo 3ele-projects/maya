@@ -89,7 +89,7 @@ add_filter( 'post_updated_messages', 'color_updated_messages' );
 
 function getcolorfromdate($start_date, $end_date){
 
-	//attach_s2member_query_filters();
+	attach_s2member_query_filters();
     $posts = get_posts(array(
         'numberposts'	=> -1,
 		'post_type'		=> 'color',
@@ -116,11 +116,9 @@ function getcolorfromdate($start_date, $end_date){
 }
 
 function get_posts_from_color($color_id, $post_type){
-	//attach_s2member_query_filters();
-
+	attach_s2member_query_filters();
     $posts = get_posts(array(
         'numberposts'	=> -1,
-   		//'numberposts'	=> 5,
         'post_type'		=> $post_type,
         'meta_key'		=> 'color',
 		'meta_value'	=> $color_id,
@@ -132,8 +130,8 @@ function get_posts_from_color($color_id, $post_type){
 		foreach ($posts as $post){
 			$cpt_post = array();
 			$cpt_post['ID'] = $post->ID;
-		//	$cpt_post['title'] = get_the_title($post->ID);
-		//	 $cpt_post['content'] = \Elementor\Plugin::$instance->frontend->get_builder_content_for_display($post->ID, true );
+			$cpt_post['title'] = get_the_title($post->ID);
+			 $cpt_post['content'] = \Elementor\Plugin::$instance->frontend->get_builder_content_for_display($post->ID, true );
 			 $cpt_post['color'] = get_field('color', $post->ID);
 			 $cpt_posts[]  = $cpt_post;
 		}

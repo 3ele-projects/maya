@@ -45,8 +45,14 @@ add_action("wp_ajax_nopriv_load_post", "load_post");
 <?php 
 function load_post() {
     if(isset($_POST["post_id"])&& is_numeric($_POST["post_id"])){
-        echo \Elementor\Plugin::$instance->frontend->get_builder_content_for_display($_POST["post_id"], true );
-    }
+        if(\Elementor\Plugin::$instance->frontend->get_builder_content_for_display($_POST["post_id"], true )){
+            echo \Elementor\Plugin::$instance->frontend->get_builder_content_for_display($_POST["post_id"], true );
+        } else {
+            the_content($_POST["post_id"]);
+        }
+      
+    } 
+    {}
     
     die();
  }
